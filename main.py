@@ -5,17 +5,6 @@ import math
 width, height = [int(i) for i in input().split()]
 
 
-def closest(origin_cell, other_cells):
-    closest_cell = None
-    min_distance = None
-    for cell in other_cells:
-        distance = origin_cell.distance(cell)
-        if not min_distance or distance < min_distance:
-            closest_cell = cell
-            min_distance = distance
-    return closest_cell
-
-
 class Cell:
     # {(3,5): cell, (4,8): cell...}
     CELLS = dict()
@@ -113,7 +102,12 @@ class Cell:
             print("After:", self, file=sys.stderr, flush=True)
 
     def closest_adjacent(self, origin_cell):
-        return closest(origin_cell, self.adjacents)
+        cells_with_ore.sort(key=lambda x: self.distance(x))
+        if self.adjacents:
+            self.adjacents.sort(key=lambda x: origin_cell.distance(x))
+            return self.adjacents[0]
+        else:
+            return None
 
     def closest_base(self):
         return Cell.get(0, self.y)
